@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 public class CrawEvent {
     private static final int DOUBLE_PRESS_DELAY = 250; // 毫秒
     private static final int JUMP_TIMER = 500;
-    private static long lastShiftPressTime;
+    private static long lastCustomActionPressTime; // 使用新的时间戳
     private static long lastJumpPressTime;
 
     @SubscribeEvent
@@ -41,19 +41,21 @@ public class CrawEvent {
         Player player = Minecraft.getInstance().player;
         Options options = Minecraft.getInstance().options;
         if (player == null || player.isSpectator()) return;
-        if (event.getKey() == options.keyShift.getKey().getValue() && event.getAction() == InputConstants.PRESS) {
+        // 监听自定义Keybind
+        if (event.getKey() == MovesLikeMafuyu.customActionKey.getKey().getValue() && event.getAction() == InputConstants.PRESS) {
             long currentTime = System.currentTimeMillis();
             if (player.getTags().contains("craw")) {
-                // 爬行状态下按潜行键就是退出爬行
+                // 爬行状态下按自定义动作键就是退出爬行
                 cancelCraw(player);
             }
-            else if (Config.enable("Craw") && currentTime - lastShiftPressTime < DOUBLE_PRESS_DELAY && player.onGround()) {
-                // 不在爬行状态且双击潜行键那就进入爬行状态
+            // 使用新的时间戳
+            else if (Config.enable("Craw") && currentTime - lastCustomActionPressTime < DOUBLE_PRESS_DELAY && player.onGround()) {
+                // 不在爬行状态且双击自定义动作键那就进入爬行状态
                 startCraw(player);
             }
             else if (Config.enable("Leap") && player.isSprinting() && currentTime - lastJumpPressTime < JUMP_TIMER && player.getDeltaMovement().y > 0 && !player.onGround() && !player.isInWater()) {
                 // 满足条件就触发飞扑
-                // 按下潜行键的时间距离跳跃不能过长lastJumpPressTime
+                // 按下自定义动作键的时间距离跳跃不能过长lastJumpPressTime
                 Vec3 lookDirection = player.getLookAngle();
                 double boost = 0.25;
                 player.setDeltaMovement(
@@ -62,7 +64,8 @@ public class CrawEvent {
                 startCraw(player);
                 lastJumpPressTime *= 10;
             }
-            lastShiftPressTime = currentTime;
+            // 更新新的时间戳
+            lastCustomActionPressTime = currentTime;
         }
         if (event.getKey() == options.keyJump.getKey().getValue() && event.getAction() == InputConstants.PRESS) {
             if (player.onGround()) {

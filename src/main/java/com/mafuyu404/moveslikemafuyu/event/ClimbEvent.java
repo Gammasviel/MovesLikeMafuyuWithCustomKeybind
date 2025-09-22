@@ -44,7 +44,8 @@ public class ClimbEvent {
         }
         double verticalSpeed = player.getDeltaMovement().y;
         Falling = verticalSpeed < 0 && verticalSpeed > -1 && !player.onGround() && !player.isInWater() && !player.isPassenger();
-        if (Falling && player.onClimbable() && options.keyShift.isDown()) {
+        // 使用自定义Keybind
+        if (Falling && player.onClimbable() && MovesLikeMafuyu.customActionKey.isDown()) {
             if (player.level().getBlockState(player.blockPosition()).is(Blocks.SCAFFOLDING)) return;
             player.setDeltaMovement(0, 0, 0);
         }
@@ -56,8 +57,9 @@ public class ClimbEvent {
         Player player = Minecraft.getInstance().player;
         Options options = Minecraft.getInstance().options;
         if (player == null || player.isSpectator()) return;
+        // 使用自定义Keybind
         if (cooldown <= 0 && event.getKey() == options.keyJump.getKey().getValue()) {
-            if (player.isShiftKeyDown() && player.onClimbable()) {
+            if (MovesLikeMafuyu.customActionKey.isDown() && player.onClimbable()) {
                 player.jumpFromGround();
                 cooldown = COOLDOWN;
             }

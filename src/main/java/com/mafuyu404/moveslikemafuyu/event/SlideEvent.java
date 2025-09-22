@@ -126,8 +126,10 @@ public class SlideEvent {
                 else cancel(player);
             }
         }
-        if (event.getKey() == options.keyShift.getKey().getValue()) {
-            if (player.isSprinting() && player.onGround() && !player.isInWater() && !player.isFallFlying() && player.isLocalPlayer() && !options.keyJump.isDown()) {
+        // 监听自定义Keybind
+        if (event.getKey() == MovesLikeMafuyu.customActionKey.getKey().getValue()) {
+            // 滑行触发条件中的潜行键替换为自定义Keybind，并移除对原版跳跃键的判断
+            if (player.isSprinting() && player.onGround() && !player.isInWater() && !player.isFallFlying() && player.isLocalPlayer()) {
                 if (!player.getTags().contains("craw")) startSlide(player);
             }
         }
@@ -198,7 +200,7 @@ public class SlideEvent {
     private static void cancel(Player player) {
         NetworkHandler.CHANNEL.sendToServer(new TagMessage("slide", false));
         Minecraft.getInstance().options.keyShift.setDown(false);
-        player.setShiftKeyDown(false);
+        player.setShiftKeyDown(false); // 确保内部状态被清除，尽管这里可能不再直接依赖原版潜行键
         player.stopFallFlying();
         if (!player.getTags().contains("craw")) player.setSprinting(true);
         if (player.isInWater()) {
