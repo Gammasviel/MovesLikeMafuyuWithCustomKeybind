@@ -19,6 +19,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.spongepowered.asm.mixin.Unique;
+import com.mafuyu404.moveslikemafuyu.Keybinds;
 
 import java.util.Arrays;
 
@@ -45,7 +46,7 @@ public class ClimbEvent {
         double verticalSpeed = player.getDeltaMovement().y;
         Falling = verticalSpeed < 0 && verticalSpeed > -1 && !player.onGround() && !player.isInWater() && !player.isPassenger();
         // 使用自定义Keybind
-        if (Falling && player.onClimbable() && MovesLikeMafuyu.customActionKey.isDown()) {
+        if (Falling && player.onClimbable() && Keybinds.customActionKey.isDown()) {
             if (player.level().getBlockState(player.blockPosition()).is(Blocks.SCAFFOLDING)) return;
             player.setDeltaMovement(0, 0, 0);
         }
@@ -59,7 +60,7 @@ public class ClimbEvent {
         if (player == null || player.isSpectator()) return;
         // 使用自定义Keybind
         if (cooldown <= 0 && event.getKey() == options.keyJump.getKey().getValue()) {
-            if (MovesLikeMafuyu.customActionKey.isDown() && player.onClimbable()) {
+            if (Keybinds.customActionKey.isDown() && player.onClimbable()) {
                 player.jumpFromGround();
                 cooldown = COOLDOWN;
             }

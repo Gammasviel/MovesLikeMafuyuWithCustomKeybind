@@ -16,6 +16,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import com.mafuyu404.moveslikemafuyu.Keybinds; 
 
 @Mod.EventBusSubscriber(modid = MovesLikeMafuyu.MODID, value = Dist.CLIENT)
 public class CrawEvent {
@@ -42,7 +43,7 @@ public class CrawEvent {
         Options options = Minecraft.getInstance().options;
         if (player == null || player.isSpectator()) return;
         // 监听自定义Keybind
-        if (event.getKey() == MovesLikeMafuyu.customActionKey.getKey().getValue() && event.getAction() == InputConstants.PRESS) {
+        if (event.getKey() == Keybinds.customActionKey.getKey().getValue() && event.getAction() == InputConstants.PRESS) {
             long currentTime = System.currentTimeMillis();
             if (player.getTags().contains("craw")) {
                 // 爬行状态下按自定义动作键就是退出爬行

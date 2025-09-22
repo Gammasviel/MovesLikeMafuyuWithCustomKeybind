@@ -23,6 +23,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import com.mafuyu404.moveslikemafuyu.Keybinds; 
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,7 +128,7 @@ public class SlideEvent {
             }
         }
         // 监听自定义Keybind
-        if (event.getKey() == MovesLikeMafuyu.customActionKey.getKey().getValue()) {
+        if (event.getKey() == Keybinds.customActionKey.getKey().getValue()) {
             // 滑行触发条件中的潜行键替换为自定义Keybind，并移除对原版跳跃键的判断
             if (player.isSprinting() && player.onGround() && !player.isInWater() && !player.isFallFlying() && player.isLocalPlayer()) {
                 if (!player.getTags().contains("craw")) startSlide(player);
